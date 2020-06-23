@@ -11,7 +11,8 @@ class CreateMediaTable extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->morphs('model');
+            $table->string('model_type');
+            $table->uuid('model_id');
             $table->uuid('uuid')->nullable();
             $table->string('collection_name');
             $table->string('name');
@@ -27,5 +28,10 @@ class CreateMediaTable extends Migration
 
             $table->nullableTimestamps();
         });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('media');
     }
 }
