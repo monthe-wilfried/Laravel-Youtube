@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -32,6 +33,14 @@ class Channel extends BaseModel implements HasMedia
         return null;
     }
 
+    public function editable(){
+        if (!Auth::check()) return false;
+        return $this->user_id == Auth::id();
+    }
+
+    public function subscriptions(){
+        return $this->hasMany(Subscription::class);
+    }
 
 
 }

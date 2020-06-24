@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'LaraTube') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script defer src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -81,5 +81,22 @@
             @yield('content')
         </main>
     </div>
+
+
+
+    <script>
+        window.AuthUser = '{!! Auth::user()  !!}'
+
+        window.__auth = function () {
+            try {
+                return JSON.parse(AuthUser)
+            } catch (e) {
+                return null
+            }
+        }
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
 </body>
 </html>

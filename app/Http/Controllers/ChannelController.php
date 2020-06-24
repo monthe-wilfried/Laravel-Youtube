@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
+use App\Http\Requests\Channel\UpdateChannelRequest;
 use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth'])->only('update');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,12 +44,7 @@ class ChannelController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+
     public function show(Channel $channel)
     {
         //
@@ -68,15 +69,22 @@ class ChannelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Channel $channel)
+    public function update(UpdateChannelRequest $request, Channel $channel)
     {
         //
         if ($request->hasFile('image')){
             // We want the user to have only one image
             $channel->clearMediaCollection('images');
             $channel->addMediaFromRequest('image')->toMediaCollection('images');
-            return redirect()->back();
         }
+
+        $channel->update([
+            'name' => $request->name,
+            'description' => $request->description,
+//            'image' => $channel->image()
+        ]);
+
+        return redirect()->back();
     }
 
     /**
