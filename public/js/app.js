@@ -1942,10 +1942,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ChannelUploads",
   props: {
     channel: {
+      type: Object,
       required: true,
       "default": function _default() {
         return {};
@@ -1954,9 +1956,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      type: Object,
       selected: false,
-      videos: []
+      videos: [],
+      progress: {}
     };
   },
   methods: {
@@ -1968,9 +1970,16 @@ __webpack_require__.r(__webpack_exports__);
       this.videos = Array.from(this.$refs.videos.files);
       var uploaders = this.videos.map(function (video) {
         var form = new FormData();
+        _this.progress[video.name] = 0;
         form.append('video', video);
         form.append('title', video.name);
-        return axios.post('/channels/' + _this.channel.id + '/videos', form);
+        return axios.post('/channels/' + _this.channel.id + '/videos', form, {
+          onUploadProgress: function onUploadProgress(event) {
+            _this.progress[video.name] = Math.ceil(event.loaded / event.total * 100); // force vuejs to update so that the progress bars can update as the video is uploading
+
+            _this.$forceUpdate();
+          }
+        });
       });
     }
   }
@@ -37668,11 +37677,46 @@ var render = function() {
             _c("p", { staticClass: "text-center" }, [_vm._v("Upload Videos")])
           ]
         )
-      : _c("div", { staticClass: "card p-3" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._m(1)
-        ])
+      : _c(
+          "div",
+          { staticClass: "card p-3" },
+          _vm._l(_vm.videos, function(video) {
+            return _c("div", { staticClass: "my-4" }, [
+              _c("div", { staticClass: "progress mb-3" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "progress-bar progress-bar-striped progress-bar-animated",
+                    style: { width: _vm.progress[video.name] + "%" },
+                    attrs: {
+                      role: "progressbar",
+                      "aria-valuenow": "50",
+                      "aria-valuemin": "0",
+                      "aria-valuemax": "100"
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.progress[video.name]) + "%")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _vm._m(0, true),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-4" }, [
+                  _c("div", { staticClass: "text-center" }, [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(video.name) +
+                        "\n                    "
+                    )
+                  ])
+                ])
+              ])
+            ])
+          }),
+          0
+        )
   ])
 }
 var staticRenderFns = [
@@ -37680,52 +37724,24 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "my-4" }, [
-      _c("div", { staticClass: "progress mb-3" }, [
-        _c("div", {
-          staticClass:
-            "progress-bar progress-bar-striped progress-bar-animated",
-          staticStyle: { width: "50%" },
-          attrs: {
-            role: "progressbar",
-            "aria-valuenow": "50",
-            "aria-valuemin": "0",
-            "aria-valuemax": "100"
+    return _c("div", { staticClass: "col-md-4" }, [
+      _c(
+        "div",
+        {
+          staticClass: "d-flex justify-content-center align-items-center",
+          staticStyle: {
+            height: "180px",
+            color: "white",
+            "font-size": "18px",
+            "background-color": "grey"
           }
-        })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4" }, [
-        _c(
-          "div",
-          {
-            staticClass: "d-flex justify-content-center align-items-center",
-            staticStyle: {
-              height: "180px",
-              color: "white",
-              "font-size": "18px",
-              "background-color": "grey"
-            }
-          },
-          [
-            _vm._v(
-              "\n                    Loading thumbnail ...\n                "
-            )
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-4" }, [
-        _c("div", { staticClass: "text-center" }, [
-          _vm._v("\n                    My Awesome Video\n                ")
-        ])
-      ])
+        },
+        [
+          _vm._v(
+            "\n                        Loading thumbnail ...\n                    "
+          )
+        ]
+      )
     ])
   }
 ]

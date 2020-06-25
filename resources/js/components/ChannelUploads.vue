@@ -9,21 +9,22 @@
         </div>
 
         <div v-else class="card p-3">
-            <div class="my-4">
+            <div class="my-4" v-for="video in videos">
                 <div class="progress mb-3">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="{ width: progress[video.name] + '%' }" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{{ progress[video.name] }}%</div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="d-flex justify-content-center align-items-center" style="height: 180px; color: white; font-size: 18px; background-color: grey;">
-                        Loading thumbnail ...
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-center align-items-center" style="height: 180px; color: white; font-size: 18px; background-color: grey;">
+                            Loading thumbnail ...
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="text-center">
-                        My Awesome Video
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            {{ video.name }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -37,15 +38,16 @@
         name: "ChannelUploads",
         props: {
             channel: {
+                type: Object,
                 required: true,
                 default: () => ({})
             }
         },
         data() {
             return {
-                type: Object,
                 selected: false,
-                videos: []
+                videos: [],
+                progress: {}
             }
         },
         methods: {
@@ -57,10 +59,18 @@
 
                 const uploaders = this.videos.map(video => {
                     const form = new FormData()
+                    this.progress[video.name] = 0
                     form.append('video', video)
                     form.append('title', video.name)
 
-                    return axios.post('/channels/'+this.channel.id+'/videos', form)
+                    return axios.post('/channels/'+this.channel.id+'/videos', form, {
+                        onUploadProgress: (event) => {
+                            this.progress[video.name] = Math.ceil((event.loaded / event.total) * 100)
+
+                            // force vuejs to update so that the progress bars can update as the video is uploading
+                            this.$forceUpdate()
+                        }
+                    })
                 })
 
 
