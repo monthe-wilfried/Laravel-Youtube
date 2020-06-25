@@ -6,7 +6,15 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import '~font-awesome/scss/font-awesome.scss';
 
+body{
+    background: #1d2124;
+}
+
+a{
+    text-decoration: none !important;
+}
 
 .btn-info{
     color: #ffffff;

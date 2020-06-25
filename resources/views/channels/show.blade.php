@@ -5,7 +5,12 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ $channel->name }}</div>
+                    <div class="card-header d-flex justify-content-between">
+                        <strong>{{ $channel->name }}</strong>
+                        @if($channel->editable())
+                            <strong><a href="{{ route('channel.upload', $channel->id) }}"><i class="fa fa-upload"></i> Upload Videos</a></strong>
+                        @endif
+                    </div>
 
                     <div class="card-body">
                         @if($channel->editable())
@@ -63,7 +68,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-info">Update Channel</button>
+                                        <button type="submit" class="btn btn-dark">Update Channel</button>
                                     </div>
 
                                 @endif

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -40,6 +41,10 @@ class Channel extends BaseModel implements HasMedia
 
     public function subscriptions(){
         return $this->hasMany(Subscription::class);
+    }
+
+    public function videos(){
+        return $this->hasMany(Video::class);
     }
 
 

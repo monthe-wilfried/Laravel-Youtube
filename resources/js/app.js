@@ -11,6 +11,7 @@ window.Vue = require('vue');
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('subscribe-button', require('./components/SubscribeButton').default);
+Vue.component('channel-uploads', require('./components/ChannelUploads').default);
 
 
 const app = new Vue({
