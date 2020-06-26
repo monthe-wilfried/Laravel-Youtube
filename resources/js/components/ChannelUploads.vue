@@ -11,19 +11,24 @@
         <div v-else class="card p-3">
             <div class="my-4" v-for="video in videos">
                 <div class="progress mb-3">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="{ width: progress[video.name] + '%' }" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{{ progress[video.name] }}%</div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="{ width: (video.percentage || progress[video.name])+'%' }" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{{ video.percentage ? video.percentage === 100 ? 'Video Processing Completed' : 'Processing '+video.percentage+'%' : 'Uploading' }}</div>
                 </div>
 
 
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="d-flex justify-content-center align-items-center" style="height: 180px; color: white; font-size: 18px; background-color: grey;">
+                        <div v-if="!video.thumbnail" class="d-flex justify-content-center align-items-center" style="height: 180px; color: white; font-size: 18px; background-color: grey;">
                             Loading thumbnail ...
                         </div>
+
+                        <img v-else :src="video.thumbnail" style="width: 100%;">
                     </div>
+
                     <div class="col-md-4">
-                        <div class="text-center">
-                            {{ video.name }}
+                        <a v-if="video.percentage && video.percentage === 100" target="_blank" :href="/videos/+video.id">{{ video.title }}</a>
+
+                        <div v-else class="text-center">
+                            {{ video.title || video.name }}
                         </div>
                     </div>
                 </div>
@@ -47,7 +52,9 @@
             return {
                 selected: false,
                 videos: [],
-                progress: {}
+                progress: {},
+                uploads: [],
+                intervals: {}
             }
         },
         methods: {
@@ -70,8 +77,36 @@
                             // force vuejs to update so that the progress bars can update as the video is uploading
                             this.$forceUpdate()
                         }
+                    }).then(({data}) => {
+                        this.uploads = [
+                            ...this.uploads,
+                            data
+                        ]
                     })
                 })
+
+                axios.all(uploaders)
+                    .then(() => {
+                        this.videos = this.uploads
+
+                        this.videos.forEach(video => {
+                            this.intervals[video.id] = setInterval(() => {
+                                axios.get('/videos/'+video.id).then(({data}) => {
+
+                                    if (data.percentage === 100){
+                                        clearInterval(this.intervals[video.id])
+                                    }
+
+                                    this.videos = this.videos.map(v => {
+                                        if(v.id === data.id){
+                                            return data
+                                        }
+                                        return v
+                                    })
+                                })
+                            }, 3000)
+                        })
+                    })
 
 
             }

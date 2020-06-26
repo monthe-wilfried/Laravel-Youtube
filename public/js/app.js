@@ -1908,6 +1908,23 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1958,7 +1975,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       selected: false,
       videos: [],
-      progress: {}
+      progress: {},
+      uploads: [],
+      intervals: {}
     };
   },
   methods: {
@@ -1979,6 +1998,32 @@ __webpack_require__.r(__webpack_exports__);
 
             _this.$forceUpdate();
           }
+        }).then(function (_ref) {
+          var data = _ref.data;
+          _this.uploads = [].concat(_toConsumableArray(_this.uploads), [data]);
+        });
+      });
+      axios.all(uploaders).then(function () {
+        _this.videos = _this.uploads;
+
+        _this.videos.forEach(function (video) {
+          _this.intervals[video.id] = setInterval(function () {
+            axios.get('/videos/' + video.id).then(function (_ref2) {
+              var data = _ref2.data;
+
+              if (data.percentage === 100) {
+                clearInterval(_this.intervals[video.id]);
+              }
+
+              _this.videos = _this.videos.map(function (v) {
+                if (v.id === data.id) {
+                  return data;
+                }
+
+                return v;
+              });
+            });
+          }, 3000);
         });
       });
     }
@@ -37688,7 +37733,10 @@ var render = function() {
                   {
                     staticClass:
                       "progress-bar progress-bar-striped progress-bar-animated",
-                    style: { width: _vm.progress[video.name] + "%" },
+                    style: {
+                      width:
+                        (video.percentage || _vm.progress[video.name]) + "%"
+                    },
                     attrs: {
                       role: "progressbar",
                       "aria-valuenow": "50",
@@ -37696,21 +37744,63 @@ var render = function() {
                       "aria-valuemax": "100"
                     }
                   },
-                  [_vm._v(_vm._s(_vm.progress[video.name]) + "%")]
+                  [
+                    _vm._v(
+                      _vm._s(
+                        video.percentage
+                          ? video.percentage === 100
+                            ? "Video Processing Completed"
+                            : "Processing " + video.percentage + "%"
+                          : "Uploading"
+                      )
+                    )
+                  ]
                 )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
-                _vm._m(0, true),
+                _c("div", { staticClass: "col-md-4" }, [
+                  !video.thumbnail
+                    ? _c(
+                        "div",
+                        {
+                          staticClass:
+                            "d-flex justify-content-center align-items-center",
+                          staticStyle: {
+                            height: "180px",
+                            color: "white",
+                            "font-size": "18px",
+                            "background-color": "grey"
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Loading thumbnail ...\n                    "
+                          )
+                        ]
+                      )
+                    : _c("img", {
+                        staticStyle: { width: "100%" },
+                        attrs: { src: video.thumbnail }
+                      })
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-4" }, [
-                  _c("div", { staticClass: "text-center" }, [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(video.name) +
-                        "\n                    "
-                    )
-                  ])
+                  video.percentage && video.percentage === 100
+                    ? _c(
+                        "a",
+                        {
+                          attrs: { target: "_blank", href: /videos/ + video.id }
+                        },
+                        [_vm._v(_vm._s(video.title))]
+                      )
+                    : _c("div", { staticClass: "text-center" }, [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(video.title || video.name) +
+                            "\n                    "
+                        )
+                      ])
                 ])
               ])
             ])
@@ -37719,32 +37809,7 @@ var render = function() {
         )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-4" }, [
-      _c(
-        "div",
-        {
-          staticClass: "d-flex justify-content-center align-items-center",
-          staticStyle: {
-            height: "180px",
-            color: "white",
-            "font-size": "18px",
-            "background-color": "grey"
-          }
-        },
-        [
-          _vm._v(
-            "\n                        Loading thumbnail ...\n                    "
-          )
-        ]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
