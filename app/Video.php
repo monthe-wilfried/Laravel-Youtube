@@ -16,4 +16,8 @@ class Video extends BaseModel
         if (!Auth::check()) return false;
         return $this->channel->user_id == Auth::id();
     }
+
+    public function votes(){
+        return $this->morphMany(Vote::class, 'voteable');
+    }
 }

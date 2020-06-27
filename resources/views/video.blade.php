@@ -78,7 +78,7 @@
                             <hr>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <div class="media">
-                                    <img class="rounded-circle mr-3" src="https://picsum.photos/id/42/200/200" width="50" height="50">
+                                    <img class="rounded-circle mr-3" src="{{ $video->channel->image() ? $video->channel->image() : 'https://picsum.photos/id/42/200/200' }}" width="50" height="50">
                                     <div class="media-body ml-2">
                                         <h5 class="mt-0 mb-0">
                                             {{ $video->channel->name }}
