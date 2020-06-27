@@ -14,7 +14,7 @@
 
                     <div class="card-body">
                         <video
-                            id="my-video"
+                            id="video"
                             class="video-js"
                             controls
                             preload="auto"
@@ -22,6 +22,7 @@
                             height="264"
                             poster="{{ $video->thumbnail }}"
                             data-setup="{}"
+                            style="width: 100%"
                         >
                             <source src="{{ asset(Storage::url('videos/'.$video->id.'/'.$video->id.'.m3u8')) }}" type="application/x-mpegURL" />
                         </video>
@@ -35,4 +36,9 @@
 
 @section('scripts')
     <script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
+
+    <script>
+        window.CURRENT_VIDEO = '{{ $video->id }}'
+    </script>
+    <script defer src="{{ asset('js/player.js') }}"></script>
 @endsection
