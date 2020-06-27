@@ -14008,3 +14008,8 @@ a {
   border-radius: 20px;
 }
 
+.likes {
+  font-weight: bold;
+  padding-left: 10px;
+}
+

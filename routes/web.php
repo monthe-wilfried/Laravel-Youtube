@@ -27,10 +27,12 @@ Route::get('videos/{video}', 'VideoController@show');
 
 Route::put('videos/{video}', 'VideoController@updateViews');
 
+
 Route::group(['middleware'=>'auth'], function (){
 
     Route::resource('channels/{channel}/subscriptions', 'SubscriptionController')->only('store', 'destroy');
     Route::get('channels/{channel}/videos', 'UploadVideoController@index')->name('channel.upload');
     Route::post('channels/{channel}/videos', 'UploadVideoController@store');
+    Route::put('videos/{video}/update', 'VideoController@update')->name('videos.update');
 
 });

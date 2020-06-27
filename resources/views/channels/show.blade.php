@@ -68,7 +68,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-dark">Update Channel</button>
+                                        <button type="submit" class="btn btn-primary">Update Channel</button>
                                     </div>
 
                                 @endif
