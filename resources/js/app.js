@@ -13,6 +13,7 @@ window.Vue = require('vue');
 Vue.component('subscribe-button', require('./components/SubscribeButton').default);
 Vue.component('channel-uploads', require('./components/ChannelUploads').default);
 Vue.component('vote-component', require('./components/VoteComponent').default);
+Vue.component('comment-component', require('./components/CommentComponent').default);
 
 
 const app = new Vue({

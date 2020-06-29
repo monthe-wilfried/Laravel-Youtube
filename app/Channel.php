@@ -29,7 +29,7 @@ class Channel extends BaseModel implements HasMedia
 
     public function image(){
         if ($this->media->first()){
-            return $this->getMedia('images')->first()->getUrl('thumb');
+            return $this->getMedia('images')->first()->getUrl();
         }
         return null;
     }

@@ -31,7 +31,7 @@
                                                         </g></g> </svg>
                                             </div>
                                         @endif
-                                        <img src="{{ $channel->image() ? asset($channel->image()) : '' }}" style="border-radius: 20px;">
+                                        <img src="{{ $channel->image() ? asset($channel->image()) : '' }}" style="border-radius: 20px; width: 100px; height: 100px;">
                                     </div>
                                 </div>
 

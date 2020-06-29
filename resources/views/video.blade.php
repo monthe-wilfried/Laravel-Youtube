@@ -86,6 +86,10 @@
                     </form>
                     @endif
                 </div>
+
+                <div class="card mt-5 p-5">
+                    <comment-component :video="{{ $video }}"></comment-component>
+                </div>
             </div>
         </div>
     </div>
@@ -112,6 +116,15 @@
 
         .thumbs-down {
             margin-left: 1rem;
+        }
+    </style>
+
+    <style>
+        .w-full {
+            width: 100% !important;
+        }
+        .w-80 {
+            width: 80% !important;
         }
     </style>
 
