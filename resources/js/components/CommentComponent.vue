@@ -2,7 +2,6 @@
 
     <div>
         <div class="media" v-for="comment in comments.data">
-<!--            <img src="https://picsum.photos/id/42/200/200" class="mr-3 rounded-circle" width="30" height="30">-->
             <avatar :username="comment.user.name" class="mr-2" :size="40"></avatar>
 
             <div class="media-body">
@@ -31,7 +30,9 @@
         </div>
 
         <div class="text-center">
-            <button class="btn btn-secondary">Load More</button>
+            <button v-if="comments.next_page_url" @click="fetchComments" class="btn btn-secondary">Load More</button>
+
+            <div v-else class="text-center">No more comments to show :)</div>
         </div>
     </div>
 
@@ -57,9 +58,17 @@
         },
         methods: {
             fetchComments() {
-                axios.get('/videos/'+this.video.id+'/comments')
+                const url = this.comments.next_page_url ? this.comments.next_page_url : '/videos/'+this.video.id+'/comments'
+
+                axios.get(url)
                 .then(({ data }) => {
-                    this.comments = data
+                    this.comments = {
+                        ...data,
+                        data: [
+                            ...this.comments.data,
+                            ...data.data
+                        ]
+                    }
                 })
             }
         }
