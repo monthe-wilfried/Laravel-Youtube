@@ -37,6 +37,6 @@ Route::group(['middleware'=>'auth'], function (){
     Route::get('channels/{channel}/videos', 'UploadVideoController@index')->name('channel.upload');
     Route::post('channels/{channel}/videos', 'UploadVideoController@store');
     Route::put('videos/{video}/update', 'VideoController@update')->name('videos.update');
-    Route::post('votes/{video}/{type}', 'VoteController@vote');
+    Route::post('votes/{entityId}/{type}', 'VoteController@vote');
 
 });

@@ -13,6 +13,7 @@
                 <h5 class="mt-0">{{ comment.user.name }}</h5>
                 <small>{{ comment.body }}</small>
 
+                <vote-component :default_votes="comment.votes" :entity_id="comment.id" :entity_owner="comment.user.id"></vote-component>
                 <replies :comment="comment"></replies>
             </div>
         </div>
@@ -30,11 +31,12 @@
     import Avatar from 'vue-avatar'
     import Replies from "./Replies";
 
+
     export default {
         props: ['video'],
         components: {
             Avatar,
-            Replies
+            Replies,
         },
         mounted() {
             this.fetchComments()

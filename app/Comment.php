@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends BaseModel
 {
     // fetches the comment with the user
-    protected $with = ['user'];
+    protected $with = ['user', 'votes'];
 
     protected $appends = ['repliesCount'];
 

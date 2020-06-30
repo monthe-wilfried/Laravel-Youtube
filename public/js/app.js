@@ -2090,6 +2090,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -38174,6 +38175,14 @@ var render = function() {
                 _vm._v(" "),
                 _c("small", [_vm._v(_vm._s(comment.body))]),
                 _vm._v(" "),
+                _c("vote-component", {
+                  attrs: {
+                    default_votes: comment.votes,
+                    entity_id: comment.id,
+                    entity_owner: comment.user.id
+                  }
+                }),
+                _vm._v(" "),
                 _c("replies", { attrs: { comment: comment } })
               ],
               1
@@ -38256,16 +38265,29 @@ var render = function() {
           [
             _c("avatar", {
               staticClass: "mr-2",
-              attrs: { username: reply.user.name, size: 40 }
+              attrs: { username: reply.user.name, size: 20 }
             }),
             _vm._v(" "),
-            _c("div", { staticClass: "media-body" }, [
-              _c("h5", { staticClass: "mt-0" }, [
-                _vm._v(_vm._s(reply.user.name))
-              ]),
-              _vm._v(" "),
-              _c("small", [_vm._v(_vm._s(reply.body))])
-            ])
+            _c(
+              "div",
+              { staticClass: "media-body" },
+              [
+                _c("h5", { staticClass: "mt-0" }, [
+                  _vm._v(_vm._s(reply.user.name))
+                ]),
+                _vm._v(" "),
+                _c("small", [_vm._v(_vm._s(reply.body))]),
+                _vm._v(" "),
+                _c("vote-component", {
+                  attrs: {
+                    default_votes: reply.votes,
+                    entity_id: reply.id,
+                    entity_owner: reply.user.id
+                  }
+                })
+              ],
+              1
+            )
           ],
           1
         )

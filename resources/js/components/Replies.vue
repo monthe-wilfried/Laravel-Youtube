@@ -7,12 +7,12 @@
         </div>
 
         <div class="media mt-3" v-for="reply in replies.data">
-            <avatar :username="reply.user.name" class="mr-2" :size="40"></avatar>
+            <avatar :username="reply.user.name" class="mr-2" :size="20"></avatar>
 
             <div class="media-body">
                 <h5 class="mt-0">{{ reply.user.name }}</h5>
                 <small>{{ reply.body }}</small>
-
+                <vote-component :default_votes="reply.votes" :entity_id="reply.id" :entity_owner="reply.user.id"></vote-component>
             </div>
         </div>
 
