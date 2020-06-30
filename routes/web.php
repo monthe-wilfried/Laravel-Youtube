@@ -29,6 +29,8 @@ Route::put('videos/{video}', 'VideoController@updateViews');
 
 Route::get('videos/{video}/comments', 'CommentController@index');
 
+Route::get('comments/{comment}/replies', 'CommentController@show');
+
 Route::group(['middleware'=>'auth'], function (){
 
     Route::resource('channels/{channel}/subscriptions', 'SubscriptionController')->only('store', 'destroy');

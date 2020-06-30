@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "font-awesome": "^4.7.0",
+        "pluralize": "^8.0.0",
         "vue-avatar": "^2.3.0"
     }
 }

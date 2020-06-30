@@ -14,7 +14,7 @@ Vue.component('subscribe-button', require('./components/SubscribeButton').defaul
 Vue.component('channel-uploads', require('./components/ChannelUploads').default);
 Vue.component('vote-component', require('./components/VoteComponent').default);
 Vue.component('comment-component', require('./components/CommentComponent').default);
-
+Vue.component('replies', require('./components/Replies').default);
 
 const app = new Vue({
     el: '#app',

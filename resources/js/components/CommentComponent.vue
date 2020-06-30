@@ -1,36 +1,24 @@
 <template>
 
     <div>
-        <div class="media" v-for="comment in comments.data">
+        <div class="form-inline my-4 w-full">
+            <input type="text" placeholder="Add a public comment" class="form-control form-control-sm w-80" style="border-top: none; border-left: none; border-right: none;">
+            <button class="btn btn-sm btn-primary"><small>Add Comment</small></button>
+        </div>
+
+        <div class="media mb-1" v-for="comment in comments.data">
             <avatar :username="comment.user.name" class="mr-2" :size="40"></avatar>
 
             <div class="media-body">
                 <h5 class="mt-0">{{ comment.user.name }}</h5>
                 <small>{{ comment.body }}</small>
 
-                <div class="form-inline my-4 w-full">
-                    <input type="text" class="form-control form-control-sm w-80">
-                    <button class="btn btn-sm btn-primary"><small>Add Comment</small></button>
-                </div>
-
-                <div class="media mt-3">
-                    <img src="https://picsum.photos/id/42/200/200" class="mr-3 rounded-circle" width="30" height="30">
-
-                    <div class="media-body">
-                        <h5 class="mt-0">Media heading</h5>
-                        <small>Cras sit amet nibh libero, in ia congue felis in faucibus.</small>
-
-                        <div class="form-inline my-4 w-full">
-                            <input type="text" class="form-control form-control-sm w-80">
-                            <button class="btn btn-sm btn-primary"><small>Add Comment</small></button>
-                        </div>
-                    </div>
-                </div>
+                <replies :comment="comment"></replies>
             </div>
         </div>
 
         <div class="text-center">
-            <button v-if="comments.next_page_url" @click="fetchComments" class="btn btn-secondary">Load More</button>
+            <button v-if="comments.next_page_url" @click="fetchComments" class="btn btn-secondary mt-3">Load More Comments</button>
 
             <div v-else class="text-center">No more comments to show :)</div>
         </div>
@@ -40,11 +28,13 @@
 
 <script>
     import Avatar from 'vue-avatar'
+    import Replies from "./Replies";
 
     export default {
         props: ['video'],
         components: {
-            Avatar
+            Avatar,
+            Replies
         },
         mounted() {
             this.fetchComments()
